@@ -10,8 +10,45 @@
     <title>Weather Dashboard</title>
 </head>
 
-<body>
-    <header>
+<body class="flex flex-col gap-5">
+    <header class="text-center bg-blue-400 text-white">Weather Dashboard</header>
+    <main class=" flex flex-row flex-wrap gap-5">
+        <aside id="cities-div" class="flex flex-col w-1/4 gap-5">
+            <div id="search-city-div" class="flex flex-col gap-5">
+                <div id="search-city-title">Search for a Major US City:</div>
+                <input id="search-city-input" class="border py-2 px-4" type="text" placeholder="San Diego">
+                <button id="search-city-btn" class="py-2 px-4 bg-blue-500 text-white">Search</button>
+            </div>
+            <div id="select-city-div" class="border flex flex-col gap-5">
+                <!-- <button class="py-2 px-4 bg-gray-400 text-center">Chicago</button> -->
+                <!-- will append up to 8 cities from local storage -->
+            </div>
+        </aside>
+        <div id="forecast-div" class="flex flex-col w-2/3 border">
+            <div id="today-forecast" class="h-32 w-100 border">
+                <div id="today-div" class="flex flex-row flex-wrap gap-5">
+                    <div id="today-city"></div>
+                    <img id="today-image"></img>
+                </div>
+                <h3 id="today-temp"></h3>
+                <h3 id="today-wind"></h3>
+                <h3 id="today-humidity"></h3>
+            </div>
+            <div id="five-day-forecast flex flex-col">
+                <h2 id="five-day-title">5-Day Forecast:</h2>
+                <div id="five-day-cards" class="flex flex-wrap gap-5">
+                    <!-- may want to append these instead -->
+                    <div id="five-day-1" class="h-24 w-24 bg-slate-500"></div>
+                    <div id="five-day-2" class="h-24 w-24 bg-slate-500"></div>
+                    <div id="five-day-3" class="h-24 w-24 bg-slate-500"></div>
+                    <div id="five-day-4" class="h-24 w-24 bg-slate-500"></div>
+                    <div id="five-day-5" class="h-24 w-24 bg-slate-500"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- <header>
         <div>Weather Dashboard</div>
     </header>
     <main>
@@ -56,9 +93,9 @@
                 </div>
             </div>
         </div>
-    </main>
-    <footer></footer>
-    <script src="https://cdn.tailwindcss.com/"></script>
+    </main> -->
 </body>
+<script src="https://cdn.tailwindcss.com/"></script>
+<script src="./script.js"></script>
 
 </html>
