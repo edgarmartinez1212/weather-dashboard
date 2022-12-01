@@ -10,12 +10,6 @@ let todayTemp = document.querySelector("#today-temp");
 let todayWind = document.querySelector("#today-wind");
 let todayHumidity = document.querySelector("#today-humidity");
 
-// let fiveDay1 = document.querySelector("#five-day-1");
-// let fiveDay2 = document.querySelector("#five-day-2");
-// let fiveDay3 = document.querySelector("#five-day-3");
-// let fiveDay4 = document.querySelector("#five-day-4");
-// let fiveDay5 = document.querySelector("#five-day-5");
-// let fiveDayArr = [fiveDay1, fiveDay2, fiveDay3, fiveDay4, fiveDay5];
 let fiveDayCards = document.querySelector("#five-day-cards");
 
 let keyName = "cities";
@@ -30,7 +24,6 @@ function init() {
   } else {
     citiesArr = JSON.parse(localStorage.getItem(keyName));
 
-    // if (citiesArr !== "") {
     if (citiesArr !== "") {
       if (citiesArr.length > 8) {
         for (let i = 0; i < 8; i++) {
@@ -50,11 +43,6 @@ function init() {
         }
       }
     }
-    // console.log(citiesArr);
-    // }
-    // let testArr = [1, 2, 3];
-    // localStorage.setItem(keyName, JSON.stringify(testArr));
-    // console.log(JSON.parse(localStorage.getItem(keyName)));
   }
 }
 
@@ -78,19 +66,14 @@ function search(event) {
       })
       .then(function (data) {
         console.log(data);
-        // let optionEl = document.createElement("button");
-        // optionEl.setAttribute("class", "py-2 px-4 bg-gray-400 text-center");
-        // optionEl.innerHTML = `${data.city.name}`;
-        // optionEl.addEventListener("click", search);
-        // selectCityDiv.append(optionEl);
 
         let kelvin = data.list[0].main.temp;
         let fahrenheit = (kelvin - 273.15) * (9 / 5) + 32;
         console.log(kelvin);
         console.log(fahrenheit);
 
-        todayCity.innerHTML = `${data.city.name} ${data.list[0].dt_txt}`;
-        todayImage.setAttribute("src", "broken_link");
+        todayCity.innerHTML = `${data.city.name} ${data.list[0].dt_txt.split(" ")[0]}`;
+        todayImage.setAttribute("src", `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`);
         todayTemp.innerHTML = `Temp: ${Math.round(fahrenheit)} &#8457;`;
         todayWind.innerHTML = `Wind: ${data.list[0].wind.speed} MPH`;
         todayHumidity.innerHTML = `Humidity: ${data.list[0].main.humidity} %`;
@@ -105,6 +88,16 @@ function search(event) {
           if (!citiesArr.includes(data.city.name)) {
             citiesArr.unshift(data.city.name);
             localStorage.setItem(keyName, JSON.stringify(citiesArr));
+          } else {
+            let tempArr = [];
+            for (let i = 0; i < citiesArr.length; i++) {
+              if (citiesArr[i] !== data.city.name) {
+                tempArr.push(citiesArr[i]);
+              }
+            }
+            citiesArr = tempArr;
+            citiesArr.unshift(data.city.name);
+            localStorage.setItem(keyName, JSON.stringify(citiesArr));
           }
         }
 
@@ -113,10 +106,9 @@ function search(event) {
           let day = dayjs()
             .add(i + 1, "day")
             .unix();
-          let dayFormat = dayjs.unix(day).format("YYYY-MM-DD 03:00:00");
+          let dayFormat = dayjs.unix(day).format("YYYY-MM-DD 00:00:00");
           console.log(dayFormat);
           for (let j = 0; j < data.list.length; j++) {
-            // console.log(data.list[j].dt_txt);
             if (dayFormat == data.list[j].dt_txt) {
               let futureForecast = document.createElement("div");
               futureForecast.setAttribute("class", "h-48 w-1/6 bg-slate-500 text-white");
@@ -125,7 +117,7 @@ function search(event) {
               futureDate.textContent = `(${dayjs.unix(day).format("M/DD/YYYY")})`;
 
               let futureImg = document.createElement("img");
-              futureImg.setAttribute("src", "broken_link");
+              futureImg.setAttribute("src", `https://openweathermap.org/img/wn/${data.list[j].weather[0].icon}@2x.png`);
 
               let futureTemp = document.createElement("p");
               let futureKelvin = data.list[j].main.temp;
@@ -158,14 +150,3 @@ init();
 // search button event listener
 searchCityBtn.addEventListener("click", search);
 // click on past results // same as search button
-
-// test();
-function test() {
-  let unix = dayjs().unix();
-  let unixFormt = dayjs.unix(unix).format("YYYY-MM-DD HH:00:00");
-  console.log(unixFormt);
-
-  let addDay1 = dayjs().add(1, "day").unix();
-  let addDayUnixFormat = dayjs.unix(addDay1).format("YYYY-MM-DD HH:00:00");
-  console.log(addDayUnixFormat);
-}
