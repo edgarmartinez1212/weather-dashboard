@@ -35,7 +35,7 @@ function init() {
       if (citiesArr.length > 8) {
         for (let i = 0; i < 8; i++) {
           let optionEl = document.createElement("button");
-          optionEl.setAttribute("class", "py-2 px-4 bg-gray-400 text-center");
+          optionEl.setAttribute("class", "py-2 px-4 bg-gray-400 text-center rounded");
           optionEl.innerHTML = citiesArr[i];
           optionEl.addEventListener("click", search);
           selectCityDiv.append(optionEl);
@@ -43,7 +43,7 @@ function init() {
       } else {
         for (let i = 0; i < citiesArr.length; i++) {
           let optionEl = document.createElement("button");
-          optionEl.setAttribute("class", "py-2 px-4 bg-gray-400 text-center");
+          optionEl.setAttribute("class", "py-2 px-4 bg-gray-400 text-center rounded");
           optionEl.innerHTML = citiesArr[i];
           optionEl.addEventListener("click", search);
           selectCityDiv.append(optionEl);
@@ -113,12 +113,13 @@ function search(event) {
           let day = dayjs()
             .add(i + 1, "day")
             .unix();
-          let dayFormat = dayjs.unix(day).format("YYYY-MM-DD HH:00:00");
-          // console.log(`printing: ${dayFormat}`);
+          let dayFormat = dayjs.unix(day).format("YYYY-MM-DD 03:00:00");
+          console.log(dayFormat);
           for (let j = 0; j < data.list.length; j++) {
+            // console.log(data.list[j].dt_txt);
             if (dayFormat == data.list[j].dt_txt) {
               let futureForecast = document.createElement("div");
-              futureForecast.setAttribute("class", "h-24 w-24 bg-slate-500 text-white");
+              futureForecast.setAttribute("class", "h-48 w-1/6 bg-slate-500 text-white");
 
               let futureDate = document.createElement("p");
               futureDate.textContent = `(${dayjs.unix(day).format("M/DD/YYYY")})`;
