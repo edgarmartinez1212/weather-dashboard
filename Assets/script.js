@@ -4,12 +4,13 @@ let searchCityBtn = document.querySelector("#search-city-btn");
 let searchCityInput = document.querySelector("#search-city-input");
 let selectCityDiv = document.querySelector("#select-city-div");
 
-let todayCity = document.querySelector("#today-city");
-let todayImage = document.querySelector("#today-image");
-let todayTemp = document.querySelector("#today-temp");
-let todayWind = document.querySelector("#today-wind");
-let todayHumidity = document.querySelector("#today-humidity");
+let currentCity = document.querySelector("#current-city");
+let currentImage = document.querySelector("#current-image");
+let currentTemp = document.querySelector("#current-temp");
+let currentWind = document.querySelector("#current-wind");
+let currentHumidity = document.querySelector("#current-humidity");
 
+let fiveDayTitle = document.querySelector("#five-day-title");
 let fiveDayCards = document.querySelector("#five-day-cards");
 
 let keyName = "cities";
@@ -19,34 +20,44 @@ function init() {
   // grab last search result from local storage // display on page
   let citiesArr;
   if (localStorage.getItem(keyName) === null) {
-    citiesArr = "";
+    citiesArr = [];
     localStorage.setItem(keyName, citiesArr);
   } else {
     citiesArr = JSON.parse(localStorage.getItem(keyName));
 
-    if (citiesArr !== "") {
+    if (citiesArr !== null) {
       if (citiesArr.length > 8) {
-        for (let i = 0; i < 8; i++) {
-          let optionEl = document.createElement("button");
-          optionEl.setAttribute("class", "py-2 px-4 bg-gray-400 text-center rounded");
-          optionEl.innerHTML = citiesArr[i];
-          optionEl.addEventListener("click", search);
-          selectCityDiv.append(optionEl);
-        }
+        createCityOption(8, citiesArr);
+        // for (let i = 0; i < 8; i++) {
+        //   let optionEl = document.createElement("button");
+        //   optionEl.setAttribute("class", "py-2 px-4 bg-gray-400 text-center rounded");
+        //   optionEl.innerHTML = citiesArr[i];
+        //   optionEl.addEventListener("click", search);
+        //   selectCityDiv.append(optionEl);
+        // }
       } else {
-        for (let i = 0; i < citiesArr.length; i++) {
-          let optionEl = document.createElement("button");
-          optionEl.setAttribute("class", "py-2 px-4 bg-gray-400 text-center rounded");
-          optionEl.innerHTML = citiesArr[i];
-          optionEl.addEventListener("click", search);
-          selectCityDiv.append(optionEl);
-        }
+        createCityOption(citiesArr.length, citiesArr);
+        // for (let i = 0; i < citiesArr.length; i++) {
+        //   let optionEl = document.createElement("button");
+        //   optionEl.setAttribute("class", "py-2 px-4 bg-gray-400 text-center rounded");
+        //   optionEl.innerHTML = citiesArr[i];
+        //   optionEl.addEventListener("click", search);
+        //   selectCityDiv.append(optionEl);
+        // }
       }
     }
   }
 }
 
-function optionButton() {}
+function createCityOption(length, citiesArr) {
+  for (let i = 0; i < length; i++) {
+    let optionEl = document.createElement("button");
+    optionEl.setAttribute("class", "py-2 px-4 bg-gray-400 text-center rounded");
+    optionEl.innerHTML = citiesArr[i];
+    optionEl.addEventListener("click", search);
+    selectCityDiv.append(optionEl);
+  }
+}
 
 function search(event) {
   // set assign variable to value of text box on html page
@@ -72,11 +83,11 @@ function search(event) {
         console.log(kelvin);
         console.log(fahrenheit);
 
-        todayCity.innerHTML = `${data.city.name} ${data.list[0].dt_txt.split(" ")[0]}`;
-        todayImage.setAttribute("src", `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`);
-        todayTemp.innerHTML = `Temp: ${Math.round(fahrenheit)} &#8457;`;
-        todayWind.innerHTML = `Wind: ${data.list[0].wind.speed} MPH`;
-        todayHumidity.innerHTML = `Humidity: ${data.list[0].main.humidity} %`;
+        currentCity.innerHTML = `${data.city.name} ${data.list[0].dt_txt.split(" ")[0]}`;
+        currentImage.setAttribute("src", `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`);
+        currentTemp.innerHTML = `Temp: ${Math.round(fahrenheit)} &#8457;`;
+        currentWind.innerHTML = `Wind: ${data.list[0].wind.speed} MPH`;
+        currentHumidity.innerHTML = `Humidity: ${data.list[0].main.humidity} %`;
 
         let citiesArr;
         if (localStorage.getItem(keyName) === "") {
@@ -101,6 +112,7 @@ function search(event) {
           }
         }
 
+        fiveDayTitle.innerHTML = "5-Day Forecast:";
         fiveDayCards.innerHTML = "";
         for (let i = 0; i < 5; i++) {
           let day = dayjs()
@@ -111,7 +123,7 @@ function search(event) {
           for (let j = 0; j < data.list.length; j++) {
             if (dayFormat == data.list[j].dt_txt) {
               let futureForecast = document.createElement("div");
-              futureForecast.setAttribute("class", "h-48 w-1/6 bg-slate-500 text-white");
+              futureForecast.setAttribute("class", "h-48 w-1/6 bg-slate-500 text-white p-3");
 
               let futureDate = document.createElement("p");
               futureDate.textContent = `(${dayjs.unix(day).format("M/DD/YYYY")})`;
@@ -135,10 +147,6 @@ function search(event) {
             }
           }
         }
-
-        //   all code goes here
-        //   build card
-        //   temp, wind, humidity
       });
   }
 }
