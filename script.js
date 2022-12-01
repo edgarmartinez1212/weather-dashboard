@@ -10,12 +10,13 @@ let todayTemp = document.querySelector("#today-temp");
 let todayWind = document.querySelector("#today-wind");
 let todayHumidity = document.querySelector("#today-humidity");
 
-let fiveDay1 = document.querySelector("#five-day-1");
-let fiveDay2 = document.querySelector("#five-day-2");
-let fiveDay3 = document.querySelector("#five-day-3");
-let fiveDay4 = document.querySelector("#five-day-4");
-let fiveDay5 = document.querySelector("#five-day-5");
-let fiveDayArr = [fiveDay1, fiveDay2, fiveDay3, fiveDay4, fiveDay5];
+// let fiveDay1 = document.querySelector("#five-day-1");
+// let fiveDay2 = document.querySelector("#five-day-2");
+// let fiveDay3 = document.querySelector("#five-day-3");
+// let fiveDay4 = document.querySelector("#five-day-4");
+// let fiveDay5 = document.querySelector("#five-day-5");
+// let fiveDayArr = [fiveDay1, fiveDay2, fiveDay3, fiveDay4, fiveDay5];
+let fiveDayCards = document.querySelector("#five-day-cards");
 
 let keyName = "cities";
 
@@ -107,12 +108,39 @@ function search(event) {
           }
         }
 
-        for (let i = 0; i < fiveDayArr.length; i++) {
-          let date = document.createElement("p");
-          let img = document.createElement("img");
-          let temp = document.createElement("p");
-          let wind = document.createElement("p");
-          let humidity = document.createElement("p");
+        fiveDayCards.innerHTML = "";
+        for (let i = 0; i < 5; i++) {
+          let day = dayjs()
+            .add(i + 1, "day")
+            .unix();
+          let dayFormat = dayjs.unix(day).format("YYYY-MM-DD HH:00:00");
+          // console.log(`printing: ${dayFormat}`);
+          for (let j = 0; j < data.list.length; j++) {
+            if (dayFormat == data.list[j].dt_txt) {
+              let futureForecast = document.createElement("div");
+              futureForecast.setAttribute("class", "h-24 w-24 bg-slate-500 text-white");
+
+              let futureDate = document.createElement("p");
+              futureDate.textContent = `(${dayjs.unix(day).format("M/DD/YYYY")})`;
+
+              let futureImg = document.createElement("img");
+              futureImg.setAttribute("src", "broken_link");
+
+              let futureTemp = document.createElement("p");
+              let futureKelvin = data.list[j].main.temp;
+              let futureFahrenheit = (futureKelvin - 273.15) * (9 / 5) + 32;
+              futureTemp.innerHTML = `Temp: ${Math.round(futureFahrenheit)} &#8457;`;
+
+              let futureWind = document.createElement("p");
+              futureWind.textContent = `Wind: ${data.list[j].wind.speed} MPH`;
+
+              let futureHumidity = document.createElement("p");
+              futureHumidity.textContent = `Humidity: ${data.list[j].main.humidity} %`;
+
+              futureForecast.append(futureDate, futureImg, futureTemp, futureWind, futureHumidity);
+              fiveDayCards.append(futureForecast);
+            }
+          }
         }
 
         //   all code goes here
@@ -129,3 +157,14 @@ init();
 // search button event listener
 searchCityBtn.addEventListener("click", search);
 // click on past results // same as search button
+
+// test();
+function test() {
+  let unix = dayjs().unix();
+  let unixFormt = dayjs.unix(unix).format("YYYY-MM-DD HH:00:00");
+  console.log(unixFormt);
+
+  let addDay1 = dayjs().add(1, "day").unix();
+  let addDayUnixFormat = dayjs.unix(addDay1).format("YYYY-MM-DD HH:00:00");
+  console.log(addDayUnixFormat);
+}
