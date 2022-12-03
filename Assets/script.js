@@ -1,5 +1,4 @@
 // global variables
-// divs on other side of html
 let searchCityBtn = document.querySelector("#search-city-btn");
 let searchCityInput = document.querySelector("#search-city-input");
 let selectCityDiv = document.querySelector("#select-city-div");
@@ -51,30 +50,6 @@ function createRecentCity(length, citiesArr) {
 function populateCurrentCity(data) {
   let fahrenheit = (data.list[0].main.temp - 273.15) * (9 / 5) + 32;
   let currentDate = dayjs.unix(data.list[0].dt).format("M/DD/YYYY");
-  // console.log(dayjs.unix(dayjs().unix()).format("M/DD/YYYY"));
-  // console.log("current:");
-  // console.log(dayjs.unix(data.list[0].dt).format("M/DD/YYYY"));
-  // console.log(data.list[0].wind.speed);
-
-  // console.log("tomorrow");
-  // let test = dayjs.unix(dayjs().add(1, "day").unix()).format("M/DD/YYYY");
-  // console.log(test);
-  // for (let i = 0; i < data.list.length; i++) {
-  //   if (dayjs.unix(data.list[i].dt).format("M/DD/YYYY") === test) {
-  //     console.log(dayjs.unix(data.list[i].dt).format("M/DD/YYYY") + " = " + data.list[i].dt_txt + " " + data.list[i].wind.speed);
-  //     console.log();
-  //   }
-  // }
-
-  // test = dayjs.unix(dayjs().add(2, "day").unix()).format("M/DD/YYYY");
-  // console.log(test);
-  // for (let i = 0; i < data.list.length; i++) {
-  //   if (dayjs.unix(data.list[i].dt).format("M/DD/YYYY") === test) {
-  //     console.log(dayjs.unix(data.list[i].dt).format("M/DD/YYYY") + " = " + data.list[i].dt_txt + " " + data.list[i].wind.speed);
-  //     console.log();
-  //   }
-  // }
-
   currentCity.innerHTML = `${data.city.name} ${currentDate}`;
   currentImage.setAttribute("src", `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`);
   currentTemp.innerHTML = `Temp: ${Math.round(fahrenheit)} &#8457;`;
@@ -82,6 +57,7 @@ function populateCurrentCity(data) {
   currentHumidity.innerHTML = `Humidity: ${data.list[0].main.humidity} %`;
 }
 
+// updates the local storage array to have most recent search at top of array
 function updateLocalStorage(data) {
   let citiesArr;
   if (localStorage.getItem(keyName) === "") {
@@ -107,19 +83,16 @@ function updateLocalStorage(data) {
   }
 }
 
+// creates five day forecast cards
 function createFiveDayForecast(data) {
   fiveDayTitle.innerHTML = "5-Day Forecast:";
   fiveDayCards.innerHTML = "";
   for (let i = 0; i < 5; i++) {
-    // console.log(dayjs.unix(dayjs().add(i+1, "day").unix()).format("MM/DD/YYYY"));
     let day = dayjs()
       .add(i + 1, "day")
       .unix();
-    // let dayFormat = dayjs.unix(day).format("YYYY-MM-DD 00:00:00");
     let dayFormat = dayjs.unix(day).format("YYYY-MM-DD 00:00:00");
-    // console.log(dayFormat);
     for (let j = 0; j < data.list.length; j++) {
-      // if (dayFormat == data.list[j].dt_txt) {
       if (dayFormat == dayjs.unix(data.list[j].dt).format("YYYY-MM-DD HH:mm:ss")) {
         let futureForecast = document.createElement("div");
         futureForecast.setAttribute("class", "h-48 w-min bg-slate-500 text-white p-3");
@@ -159,7 +132,6 @@ function search(event) {
     city = event.target.textContent;
   }
 
-  // if (city !== "") {
   let requestUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=17bd19e7810b6efddc6ff67891c18a92`;
   fetch(requestUrl)
     .then(function (response) {
@@ -169,32 +141,14 @@ function search(event) {
       populateCurrentCity(data);
       updateLocalStorage(data);
       createFiveDayForecast(data);
-      // test(data);
       forecastDiv.removeAttribute("class", "hidden");
     });
   // }
 }
 
 // function calls
-// event listeners
 init();
-function test(data) {
-  //   let day = dayjs()
-  //   .add(i + 1, "day")
-  //   .unix();
-  // let dayFormat = dayjs.unix(day).format("YYYY-MM-DD 00:00:00");
 
-  // get today and find in data
-  let day = dayjs().unix();
-  let currentDay = dayjs.unix(day).format("YYYY-MM-DD 00:00:00");
-  // console.log(currentDay);
-  for (let i = 0; i < data.list.length; i++) {
-    console.log(data.list[i].dt_txt);
-  }
-  // console.log(data.list);
-  // get next 5 days
-}
-
+// event listeners
 // search button event listener
 searchCityBtn.addEventListener("click", search);
-// click on past results // same as search button
