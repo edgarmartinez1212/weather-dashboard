@@ -48,13 +48,20 @@ function createRecentCity(length, citiesArr) {
 
 // populates current city data on large div
 function populateCurrentCity(data) {
+  let currentDate = dayjs.unix(dayjs().unix());
   let fahrenheit = (data.list[0].main.temp - 273.15) * (9 / 5) + 32;
-  let currentDate = dayjs.unix(data.list[0].dt).format("M/DD/YYYY");
-  currentCity.innerHTML = `${data.city.name} ${currentDate}`;
-  currentImage.setAttribute("src", `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`);
-  currentTemp.innerHTML = `Temp: ${Math.round(fahrenheit)} &#8457;`;
-  currentWind.innerHTML = `Wind: ${data.list[0].wind.speed} MPH`;
-  currentHumidity.innerHTML = `Humidity: ${data.list[0].main.humidity} %`;
+  currentCity.innerHTML = `${data.city.name} ${currentDate.format("M/DD/YYYY")}`;
+  console.log(currentDate);
+
+  for (let i = 0; i < data.list.length; i++) {
+    if (currentDate.format("M/DD/YYYY HH:mm:ss") === dayjs.unix(data.list[i].dt).format("YYYY-MM-DD HH:mm:ss")) {
+      console.log(true);
+    }
+    currentImage.setAttribute("src", `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`);
+    currentTemp.innerHTML = `Temp: ${Math.round(fahrenheit)} &#8457;`;
+    currentWind.innerHTML = `Wind: ${data.list[0].wind.speed} MPH`;
+    currentHumidity.innerHTML = `Humidity: ${data.list[0].main.humidity} %`;
+  }
 }
 
 // updates the local storage array to have most recent search at top of array
@@ -95,7 +102,7 @@ function createFiveDayForecast(data) {
     for (let j = 0; j < data.list.length; j++) {
       if (dayFormat == dayjs.unix(data.list[j].dt).format("YYYY-MM-DD HH:mm:ss")) {
         let futureForecast = document.createElement("div");
-        futureForecast.setAttribute("class", "h-48 w-min bg-slate-500 text-white p-3");
+        futureForecast.setAttribute("class", "h-52 w-fit bg-slate-500 text-white p-3");
 
         let futureDate = document.createElement("p");
         futureDate.textContent = `(${dayjs.unix(day).format("M/DD/YYYY")})`;
