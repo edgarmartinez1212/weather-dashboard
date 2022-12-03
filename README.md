@@ -26,7 +26,7 @@ WHEN I refresh the page
 THEN I am presented with my recent searched city at the top of the list of "recent searches"
 
 *** recent searches holds 8 most recent cities: local storage holds all searches and updates accordingly [no duplicate searches]
-*** need to note that at 9pm, 'data.list[0]' will display the following day causing current weather conditions to read as the next day
+*** need to note that after 9pm, 'data.list[0]' will display the following day causing current weather conditions to read as the next day
 ```
 
 ## Mock-Up
