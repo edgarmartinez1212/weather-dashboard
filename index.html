@@ -11,9 +11,10 @@
 </head>
 
 <body class="flex flex-col gap-5 p-5">
-    <header class="text-center bg-blue-400 text-white h-16 text-3xl p-3">Weather Dashboard</header>
-    <main class=" flex flex-row flex-wrap gap-5">
-        <aside id="cities-div" class="flex flex-col w-1/4 gap-5">
+    <header class="bg-blue-400 text-white h-fit text-3xl text-center p-3">Weather Dashboard
+    </header>
+    <main class=" flex flex-row flex-wrap gap-5 m-auto">
+        <aside id="cities-div" class="flex flex-col w-fit gap-5">
             <div id="search-city-div" class="flex flex-col gap-5">
                 <div id="search-city-title" class="text-xl">Search for a City:</div>
                 <input id="search-city-input" class="border py-2 px-4" type="text" placeholder="San Diego">
@@ -22,8 +23,9 @@
             <div id="select-city-div" class="flex flex-col gap-5">
             </div>
         </aside>
-        <div id="forecast-div" class="flex flex-col w-2/3 gap-5">
-            <div id="current-forecast" class="h-48 w-100 border p-5">
+
+        <div id="forecast-div" class="flex flex-col w-fit hidden">
+            <div id="current-forecast" class="h-fit w-100 border p-5">
                 <div id="current-div" class="flex flex-row flex-wrap gap-5">
                     <div id="current-city" class="text-xl"></div>
                     <img id="current-image"></img>
@@ -32,7 +34,7 @@
                 <h3 id="current-wind"></h3>
                 <h3 id="current-humidity"></h3>
             </div>
-            <div id="five-day-forecast" class="flex flex-col gap-3">
+            <div id="five-day-forecast" class="flex flex-col gap-3 mt-3">
                 <h2 id="five-day-title" class="text-xl"></h2>
                 <div id="five-day-cards" class="flex flex-wrap gap-7">
                 </div>
